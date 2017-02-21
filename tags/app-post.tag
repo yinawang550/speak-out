@@ -6,19 +6,8 @@
 
 <post-list each={ postItem }></post-list>
 
-<!-- post-editor></post-editor -->
+<post-editor></post-editor>
 
-<div>
-	<input class= "inputbox" type="text" ref="postName" value="" placeholder="Your Name">
-</div>
-
-<div>
-	<textarea class="textarea" rows="8" ref="postText" placeholder="Type your post"></textarea>
-
-	<button class="buttonpost" type="button" onclick={ sendPost }>Post</button>
-</div>
-
-</div>
 
 	<div>
 		<button type="button" onclick={ toggleButtonA }>Do you like the posting experience?</button>
@@ -31,14 +20,6 @@
 
 <!-- scripts start from here -->
 <script>
-	this.sendPost = function(event){
-	  var newPost = {
-	    Name: this.refs.postName.value,
-	    Post: this.refs.postText.value,
-	}
-	this.postItem.push(newPost);
-	this.update();
-	};
 
 this.postItem = [{
 	Name:"Abby",
@@ -56,6 +37,8 @@ this.buttonA =false;
 		this.toggleButtonA = function(event){
 			this.buttonA=!this.buttonA;
 		};
+
+<!-- riot.mount('post-list'); -->
 
 </script>
 
