@@ -1,7 +1,6 @@
 <mail-editor>
 	<p>Reply</p>
 
-
 	<div>
 		<span>Subject</span>
 		<br><input type="text" ref="replySubject" value="">
@@ -11,7 +10,7 @@
 <br>
 	<span><button type="button" onclick={ sendMessage }>Send</button></span>
 	<span><button type="button" onclick={ parent.closeEditor }>Cancel</button></span>
-	
+
 	<script>
 		console.log(this);
 
@@ -29,9 +28,9 @@
 	<style>
 		:scope {
 			display: block;
-			background-color: #666;
-			color: white;
-			border: 1px solid black;
+			background-color:	#20B2AA;
+			color: yellow;
+			border: 1px;
 			border-radius: 3px;
 			padding: 10px;
 			position: fixed;
@@ -39,9 +38,17 @@
 			bottom: 0;
 			width: 300px;
 			height: 200px;
+
 		}
 		textarea {
 			margin-top: 10px;
 		}
+
+		body {
+  background: #000;
+}
+
+
+
 	</style>
 </mail-editor>

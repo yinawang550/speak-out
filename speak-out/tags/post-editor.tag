@@ -12,6 +12,8 @@
 
     </div>
 
+
+
     <script>
 				var that = this;
 
@@ -31,13 +33,19 @@
 							if (that.time == 0 ) {
 								clearInterval(timer);
 								that.sendPost();
+
 							}
+
+              if (onclick = true) {
+                that.timer = 10;
+              }
 
 							that.update();
 					  }, 1000);
 					}
 
-				}
+				};
+
         this.sendPost = function (event) {
             var newPost = {
                 Name: this.refs.postName.value,
@@ -47,8 +55,18 @@
             this.parent.update();
             this.refs.postName.value="";
             this.refs.postText.value="";
-            this.refs.clear();
+
+            // clearInterval(timer);
+              this.time = 10;
         };
+
+        // this.reset =  function(sec)
+        //     {
+        //         sec = (typeof(sec) !== 'undefined') ? sec : 0;
+        //         time = sec;
+        //         generateTime(time);
+        //     };
+
 
         // riot.tag('timer', '<p>Seconds left: { time }</p>', function (opts) {
         //     this.time = opts.start || 0;
