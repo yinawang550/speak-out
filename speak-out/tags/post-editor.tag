@@ -20,28 +20,22 @@
 				this.time = 10;
 
 				var timer;
-				this.startTimer = function(event){
+
+				this.startTimer = function(event) {
+
 					if (!timer) {
-						timer = setInterval(function(){
+
+						timer = setInterval(function() {	// Part A: Turns out timer = 2 is perfectly normal. setInterval() returns a number, a number representing the number of timers that are alive globally at some point in time. Since timer was set to 2 (the second timer that exists in the global space) when we clearTimer(), we explicitly set timer = null so that the if statement on line 26 triggers correctly. See line 55.
 					    that.time--;
-							console.log(that.time);
 
-							// if (that.time == 5) {
-							// 	alert('Better hurry;')
-							// }
-
-							if (that.time == 0 ) {
-								clearInterval(timer);
+							if (that.time === 0 ) {
 								that.sendPost();
-
 							}
 
-              if (onclick = true) {
-                that.timer = 10;
-              }
-
 							that.update();
+
 					  }, 1000);
+
 					}
 
 				};
@@ -52,12 +46,16 @@
                 Post: this.refs.postText.value
             };
             this.parent.postItem.push(newPost);
-            this.parent.update();
+
             this.refs.postName.value="";
             this.refs.postText.value="";
 
-            // clearInterval(timer);
-              this.time = 10;
+            clearInterval(timer);
+
+						timer = null;	// Part B: This solves the issue with the timer value in the if statement on line 28
+
+            this.time = 10;
+						this.parent.update();
         };
 
         // this.reset =  function(sec)

@@ -5,7 +5,7 @@
     this.time = opts.start || 120;
 
     tick() {
-      this.update({ time: --this.time })
+      this.update({ time: this.time })
     }
 
     var timer = setInterval(this.tick, 1000)
