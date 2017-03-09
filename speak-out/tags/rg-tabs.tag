@@ -1,31 +1,55 @@
 <rg-tabs>
+	<div class="tabs { 'tabs--' + opts.tabs.type }">
+		<div class="tabs__headings">
+			<div each="{ opts.tabs.tabs }" class="tab-heading { 'tab-heading--active': active, 'tab-heading--disabled': disabled }" onclick="{ parent.open }">
+				{ heading }
+			</div>
+		</div>
+		<div each="{ opts.tabs.tabs }" class="tabs__tab { 'tabs__tab--active': active }">
+			<div if="{ text }">
+				{ text }
+			</div>
+			<div if="{ include }">
+				{ include.responseText }
+			</div>
+		</div>
+	</div>
 
-  <p>test</p>
-<script>
-var tags = riot.mount('rg-tabs', {
-  tabs: {
-  type: 'primary|secondary|success|error',
-  tabs: [{
-    heading: 'Tab one',
-    text: 'This is tab one'
-  }, {
-    heading: 'Tab two',
-    text: 'This is tab two',
-    active: true
-  }, {
-    heading: 'Disabled tab',
-    text: 'This is disabled tab',
-    disabled: true
-  }, {
-    heading: 'Tab three',
-    include: 'tab.html'
-  }]
-  }
-})
-tags[0].on('open', function (tab) { console.log('open', tab) })
-       .on('loading', function (tab) { console.log('loading', tab) })
-       .on('loaded', function (tab) { console.log('loaded', tab) })
+	<script>
+		console.log('rg-tabs');
+		const fetch = (tab) => {
+			const req = new XMLHttpRequest()
+			req.onload = resp => {
+				const activeTab = this.root.querySelector('.tabs__tab--active')
+				if (activeTab) activeTab.innerHTML = req.responseText
+				this.trigger('loaded', tab)
+			}
+			req.open('get', tab.include, true)
+			req.send()
+			this.trigger('loading', tab)
+		}
 
-</script>
+		this.open = e => {
+			let tab = e.item
+			if (!tab.disabled && !tab.active) {
+				opts.tabs.tabs.forEach(tab => {
+					tab.active = false
+				})
+				this.trigger('open', tab)
+				tab.active = true
+			}
+		}
+
+		this.on('update', () => {
+			if (!opts.tabs) opts.tabs = {}
+			if (!Array.isArray(opts.tabs.tabs)) return
+			opts.tabs.tabs.forEach(tab => {
+				if (!tab.disabled && tab.active && tab.include) {
+					fetch(tab)
+				}
+			})
+		})
+
+	</script>
 
 </rg-tabs>
