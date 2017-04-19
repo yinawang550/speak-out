@@ -25,10 +25,10 @@
 		</div>
 		<br>
 	</div>
-<div id="post">
-	<home if={ !user }></home>
-	<members if={ user }></members>
-</div>
+	<div id="post">
+		<home if={ !user }></home>
+		<members if={ user }></members>
+	</div>
 
 	<script>
 		var that = this;

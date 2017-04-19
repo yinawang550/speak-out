@@ -1,77 +1,69 @@
 <post-item>
-	<reply-editor class="comment" each={ publicComments }></reply-editor>
 
+	<div>
+		<p>
+			<strong>{author}</strong>
+			:
+			<span>{message}</span>
 
+			<button type="button" name="button" onclick={ replyEditor }>Comment</button>
+
+			<button type="button" onclick={ closeEditor }>Cancel</button>
+
+		</p>
+
+		<comment-editor if={ creatingComment } x={ "cat" } y={ true } postid={ id }></comment-editor>
+
+		<div >
+
+			<button type="button" onclick={ toggleButtonA }>
+				<span>&#x2764;</span>
+			</button>
+
+			<p class=likenum>
+				{ buttonA ? "1:)" : "0:("}
+			</p>
+		</div>
+	</div>
 
 	<script>
 
+		this.buttonA = false;
+
+		this.toggleButtonA = function (event) {
+			that.buttonA = !that.buttonA;
+		};
 
 		var that = this;
+		this.creatingComment = false;
+		console.log('reply-editor');
 
-		this.creatingReply = false;
+		this.replyEditor = function (event) {
+			console.log('replyEditor', this);
+			// console.log("ReplyEditor"); console.log(this); console.log(that);
+			this.creatingComment = true;
+			// this.update(); this.closeEditor();
+		};
+		this.closeEditor = function (event) {
+			this.creatingComment = false;
+			// that.update();
+		};
 
-			this.ReplyEditor = function (event) {
-					that.creatingReply = true;
-			};
-			this.closeEditor = function (event) {
-            that.creatingReply = false;
-
-        };
-		this.publicComments = [];
-
-		var database = firebase.database();
-		var publicCommentsRef = database.ref('comments/public');
-
-		publicCommentsRef.on('value', function (snapshot) {
-			var commentsData = snapshot.val();
-
-			if (commentsData) {
-
-				that.publicComments = Object.values(commentsData);
-			} else {
-				that.publicComments = [];
-			}
-			that.update();
-		});
-
-		this.on('unmount', function (event) {
-			publicCommentsRef.off('value');
-		});
-
-		// this.myReplys = [];
-		// var database = firebase.database();
-		// var myReplyRef = database.ref('reply');
+		// this.myReply = []; postReply(event) {   var newTask = {};   if (event.type === "click") {     newTask.task = this.refs.comment.value;     console.log('xxx', this.refs.comment);     this.myReply.push(newTask);   } }   var database =
+		// firebase.database();   var myReplyRef = database.ref('myreply'); myReplyRef.on('child_added', function(snapshot) {
 		//
-		// // this.fakeList = [{msg:"A"},{msg:"B"},{msg:"C"}];
+		//     var data = snapshot.val(); // Object with properties as keys         data.id = snapshot.key;
 		//
-		// myReplyRef.on('value', function (snapshot) {
-		// 	var data = snapshot.val();
-		//
-		// 	console.log(data);
-		//
-		// 	var replys = [];
-		// 	for (var key in data) {
-		// 		replys.push(data[key]);
-		// 	}
-		// 	console.log(replys);
-		// 	that.myReplys = replys;
-		//
-		// 	console.log(that.myReplys);
-		//
-		// 	//
-		// 	// console.log('this.parent -------', that.parent);
-		// 	that.update();
-		// 	// console.log(that);
-		//
-		// });
+		//     that.myReply.push(data);     that.update();   });
 	</script>
-
 	<style>
-		:scope {
-			display: block;
+		.comment {
+			background: rgba(220, 220, 220, 0.9);
+			padding: 15px;
+			border-radius: 5px;
 		}
-		form {
-			padding-bottom: 15px;
+		.comment:nth-child(even) {
+			background: rgba(255, 255, 255, 0.3);
 		}
 
 	</style>
