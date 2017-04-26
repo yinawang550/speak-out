@@ -21,13 +21,14 @@
 
 		<div >
 
-			<button type="button" onclick={ likeCount }>
-				<span> LIKE { like-count }</span>
+			<button type="button" onclick={ addLike }>
+				<span>
+					LIKE { likeCount }</span>
 			</button>
 
-			<p class=likenum>
+			<!-- <p class=likenum>
 				{ likeButton ? "1:)" : "0:("}
-			</p>
+			</p> -->
 		</div>
 	</div>
 
@@ -42,6 +43,8 @@
 		console.log('posts/' + this.postID + '/comments');
 
 		console.log('comment-editor', this);
+
+		this.likeCount = 0;
 
 		// this.fakeList = [{msg:"A"},{msg:"B"},{msg:"C"}];
 
@@ -68,54 +71,60 @@
 
 		// this.likeButton = false;
 		//
-		// this.likeCount = function (event) {
-		// 	that.likeButton = !that.likeButton;
-		// };
+		// this.likeCount = function (event) { 	that.likeButton = !that.likeButton; };
 
 		var that = this;
 
-		this.likeCount = function (event) {
+		this.addLike = function (event) {
 			var database = firebase.database();
 			var likesRef = database.ref('posts/' + this.postID + '/likes');
+			var likedUsersRef = database.ref('posts/' + this.postID + '/likedUsers');
 
-		    likesRef.once('value', function(snapshot) {
-		        var currentLikes = snapshot.val() ? snapshot.val() : 0;
-						//change object to value , make currentLikes always be a number
+			likesRef.once('value', function (snapshot) {
 
-						var newLike = {};
-						var key = likesRef.push().key;
-						newLike.id = key;
-						newLike.author = firebase.auth().currentUser.displayName;
+				var currentLikes = snapshot.val() ? snapshot.val() : 0;
+						currentLikes++;
 
-						database.ref('posts/' + this.postID + '/likes/' + key).set(newLike);
+				// var key = likedUsersRef.push().key;
+				var key = firebase.auth().currentUser.uid;
 
-						console.log("currentLikes");
+				var newLikeUser = {};
+						newLikeUser.id = key;
+						newLikeUser.author = firebase.auth().currentUser.displayName;
 
-					//todo each user can only like once
-		        likesRef.update({
+				database.ref('posts/' + this.postID + '/likedUsers/' + key);
+				likedUsersRef.child(key).set(newLikeUser);
+
+				likesRef.set(currentLikes);
 
 
-		            'like-count': currentLikes[".like-count"] + 1
-		            }, function(error) {
-		              if (error) {
-		                console.log('Data could not be saved:' + error);
-		              } else {
-		                console.log('Data saved successfully');
-		              }
-		            });
-		        // getLikeCount(id);
-		    });
+
+				//change object to value , make currentLikes always be a number
+
+				// var newLike = {};
+				// var key = likesRef.push().key;
+				// newLike.id = key;
+				// newLike.author = firebase.auth().currentUser.displayName;
+				//
+				// database.ref('posts/' + this.postID + '/likes/' + key).set(newLike);
+				//
+				// console.log("currentLikes");
+
+				//todo each user can only like once
+				// likesRef.update({
+				// 	'like-count': currentLikes[".like-count"] + 1
+				// }, function (error) {
+				// 	if (error) {
+				// 		console.log('Data could not be saved:' + error);
+				// 	} else {
+				// 		console.log('Data saved successfully');
+				// 	}
+				// });
+				// getLikeCount(id);
+			});
 		}
-		// function getLikeCount(postID) {
-		//     var numLikesRef = database.ref('posts/' + this.postID + '/likes/' +'/like-count');
-		//     numLikesRef.once('value', function(snapshot) {
-		//         if ( snapshot.val() ) {
-		//             document.querySelector('#' + postID + ' .like-count').innerHTML = snapshot.val() + ' likes';
-		//         } else {
-		//             return false;
-		//         }
-		//     });
-		// }
+		// function getLikeCount(postID) {     var numLikesRef = database.ref('posts/' + this.postID + '/likes/' +'/like-count');     numLikesRef.once('value', function(snapshot) {         if ( snapshot.val() ) {             document.querySelector('#' +
+		// postID + ' .like-count').innerHTML = snapshot.val() + ' likes';         } else {             return false;         }     }); }
 
 		this.creatingComment = false;
 		console.log('reply-editor');
